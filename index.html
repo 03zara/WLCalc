@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    
+<head>
+    
+
+    <meta charset="utf-8" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Weight Gain/Loss Calculator</title>
+    
+    <link rel="stylesheet" type="text/css" href="myScript.min.css">
+    
+    <link href="external/css/normalize.css" rel="stylesheet" type="text/css">
+    
+    <link rel="icon" type="image/png" href="imgs/calculator-16-279671.png">
+    
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"> 
+    
+    <link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
+    
+    <!-- Animate.css CDN -->
+    
+    <link rel="stylesheet" href="css/animate.css">
+    
+
+    </head>
+<body>
+    
+
+    <h1>Weight Gain/Loss Calculator</h1>
+    
+    <div id="message">
+        <p> This weight gain/loss calculator will show you how long it will take to reach your target weight (gaining or losing), based on different levels of calorie intake. Determine how to lose weight fast, lose weight in few days, or lose weight more weight over a longer period of time. </p>
+    
+    </div>
+    
+    
+    <div id="container">
+    <h3>About you:</h3>
+    
+    <hr>
+        
+        <div id="stripe">
+    <button id="impBtn" class="impBtn selected">imperial</button>
+    <button id="metBtn" class="metBtn" >metric</button>
+        </div>
+        
+     <div class ="infoWrap">
+         <!-- ASK USER AGE-->
+    <div class="age">
+    <p>Please enter your age:</p>
+    <input id="ageInput" class="age" type="number" min="18" max="100" placeholder="18-100" required>
+    </div>
+   
+
+
+    
+    <!-- ASK USER GENDER-->
+    <div class="genderCSS">
+    <p>Gender:</p>
+    <form id="gender" >    
+    <input type="radio" id="radioMale" class="gender" value="male" name="gender" > Male
+    <input type="radio" id="radioFemale" class="gender" value="female" name="gender"> Female
+    </form>
+    </div>
+
+      <!-- ASK USER HEIGHT-->
+    <div class="imperial">     
+    
+        <div class="heightbox">
+        <p>What is your height:</p>
+
+        <form type="number">
+        <input id="footInput" type="number" min="4" max="6" required> ft
+        <input id="inchInput" type="number" min="0" max="11" required> in
+        </form>
+
+        </div>
+
+
+         <!-- ASK USER WEIGHT-->
+        <div class="weight"> 
+
+        <p>What is your weight?</p>
+        <input class="weightInput" type="number" min="50" max="400" required> lbs
+        </div>
+        
+    </div>
+         
+    <div class="metric">    
+        <div class="heightbox">
+        <p>What is your height?</p>
+
+        <form id="height" type="number">
+        <input id="cmInput" type="number" min="100" max="200" required> cm
+        </form>
+
+        </div>
+
+
+        <div class="weight"> 
+
+        <p>What is your weight?</p>
+        <input class="weightInputKg" type="number" min="10" max="150" required> kg
+        </div>
+    
+    </div>
+    
+    
+    <!-- ASK USER ABOUT EXERCISE -->
+    <div class="exercise">
+    <p>What your daily Activity consists of?</p>
+        
+        
+    <select id="exerciseInput" >
+        <option value="">Please choose one:</option>
+        <option value="No Activity">No Activity </option>
+        <option value="Lightly Active">Lightly Active</option>
+        <option value="Moderately Active">Moderately Active</option>
+        <option value="Very Active">Very Active</option>
+        <option value="Extremely Active">Extremely Active</option>
+    </select>
+        <div class="popup" onclick="myFunction()"> <i class="fa fa-info-circle fa-lg"></i>
+
+        <span class="popuptext" id="myPopup"><span class="activity">No Exercise:</span> Office/desk job. Little to no regular exercise.  
+            <br/>
+            <br/>
+        <span class="activity">Lightly active:</span> Intensive exercise for at least 20 minutes 1 to 3 times per week.
+            <br/>
+            <br/>
+        <span class="activity">Moderately active:</span> Intensive exercise for at least 30 to 60 minutes 3 to 4 times per week.
+            <br/>
+            <br/>
+        <span class="activity">Very active:</span> Intensive exercise for 60 minutes or greater 5 to 7 days per week.
+            <br/>
+            <br/>
+        <span class="activity">Extremely active:</span> Exceedingly active and/or very demanding activities. </span>
+        </div>    
+    
+    </div>    
+         
+    </div> 
+        
+        <br>
+        <br>
+
+        <h3>Weight goal:</h3>
+        <hr>
+        
+        <div class="imperial">
+            <div type="number">
+              <p>Goal Weight (lbs):</p> <input class="goalWeightInput" type="number" min="50" max="400" required>
+            </div>
+        </div> 
+        
+        <div class="metric">
+            <div type="number">
+              <p>Goal Weight (Kg):</p> <input class="goalWeightInputKg" type="number" min="50" max="400" required>
+            </div>
+        </div>
+        
+        <p>I want to reach my goal in (days):</p> <input id="goalDaysInput" type="number" min="10" max="600" required>
+        <br/>   
+    
+
+         
+    <input type="button" value="Calculate" class="button1">
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        
+ </div>   <!--END OF CONTAINER-->
+
+    
+        <div id="results" class="animated SlideInLeft">
+            <h3> RESULTS</h3>
+            
+            <p id="displayCurrentCalories"> </p>
+            <p id="displayGoalCalories"></p>
+            <p id="displayMaintainCalories"></p>
+        </div>
+
+<footer>
+    <div id="footer">
+    
+    <p>Copyright © Zara Ahmed 2018 </p>
+    </div>
+    
+</footer>
+        
+ <script type="text/javascript" src="js/myScript.min.js"></script>
+    
+</body>    
+
+    
+    
+</html>
