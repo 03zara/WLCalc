@@ -3,6 +3,9 @@ var metBtn = document.querySelector("#metBtn");
 
 var ageInput = document.querySelector("#ageInput");
 
+var female = document.getElementById("radioFemale");
+var male = document.getElementById("radioMale");
+
 var footInput = document.getElementById("footInput");
 var inchInput = document.getElementById("inchInput");
 
@@ -97,7 +100,7 @@ var button1 = document.querySelector(".button1");
 
     function WeightLossCalculator() {
 
-            // first check all fields are fielded in
+            // first check all fields are filled in
             if (impBtn.classList.contains("selected")) {
                 validateForm(); 
             }
