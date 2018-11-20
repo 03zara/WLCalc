@@ -84,55 +84,41 @@ var button1 = document.querySelector(".button1");
     }
        
 
-// functions to warn user if the calories calculated is off the max and min limit of consumption.
-    function Warning() {
-        var warn = "Warning: your goal requires you to consume less than the recommended minimum requirement of 1000 calories per day which implies a high risk for your health and is not recommended. Please enter a more realistic goal weight, increase the number of days entered or just exercise more.";
-        return warn;    
-    }
-            
-    function WarningMax() {
-        var warn = "Warning: your goal requires you to consume more than the recommended maximum requirement of 3000 calories per day which implies a high risk for your health and is not recommended. Please enter a more realistic goal weight, increase the number of days entered or exercise less.";
-        return warn;   
-    }
-
-
     // this function calculates the Weight loss/gain
-
+    
     function WeightLossCalculator() {
+        
+            // functions to warn user if the calories calculated is off the max and min limit of consumption.
+        function Warning() {
+            var warn = "Warning: your goal requires you to consume less than the recommended minimum requirement of 1000 calories per day which implies a high risk for your health and is not recommended. Please enter a more realistic goal weight, increase the number of days entered or just exercise more.";
+            return warn;    
+        }
 
-            // first check all fields are filled in
-            if (impBtn.classList.contains("selected")) {
-                validateForm(); 
-            }
-            else {
-                validateFormMetric();
-            }
+        function WarningMax() {
+            var warn = "Warning: your goal requires you to consume more than the recommended maximum requirement of 3000 calories per day which implies a high risk for your health and is not recommended. Please enter a more realistic goal weight, increase the number of days entered or exercise less.";
+            return warn;   
+        }
         
             // create function that converts foot to inches
-            function calculation () {
-                var convertFtToNum = parseInt(footInput.value || 0);
-                var convertInchToNum = parseInt(inchInput.value || 0);
+        function calculation () {
+            var convertFtToNum = parseInt(footInput.value || 0);
+            var convertInchToNum = parseInt(inchInput.value || 0);
 
-                var convertToInches = convertFtToNum * 12 + convertInchToNum;
-                    return convertToInches;
-            }
+            var convertToInches = convertFtToNum * 12 + convertInchToNum;
+            return convertToInches;
+        }
         
-            //Converted input values to float to be used for calculations
-            var age = parseFloat(ageInput.value || 0);
-            var convertGoalDays = parseFloat(goalDaysInput.value || 0);
         
-            if (impBtn.classList.contains("selected")) {
-                var height = calculation() || 0;
-                var weight = parseFloat(weightInput.value || 0);
-                var gWeight = parseFloat(goalWeightInput.value || 0);
-            }
-            else {
-                var height = parseFloat(cmInput.value || 0);
-                var weight = parseFloat(weightInputKg.value || 0);
-                var gWeight = parseFloat(goalWeightInputKg.value || 0);
-            }
-            
-            // Calculates the AMOUNT of calories needed to lose per day
+             // BMR calculation only WITHOUT taking physical activity into account
+             // female and male currentBMR calculation
+
+        function BMR(a,b,c,d,e) {
+
+            var BMRcalc = a + (b * c) + (d * height) - (e * age);
+            return BMRcalc;
+        }
+        
+                    // Calculates the AMOUNT of calories needed to lose per day
         function CalorieLose() {
            
                 var differenceInWeight = weight - gWeight;
@@ -147,187 +133,109 @@ var button1 = document.querySelector(".button1");
                 var caloriesNeededToReduce = differenceInWeight * 3500;
                 var finalCalories = caloriesNeededToReduce/convertGoalDays;
                 return Math.round(finalCalories);
+        } 
+        
+    
+        function CaloriesInfo(activity) {
+                    
+                if (female.checked) {
+                    var currentCalories = Math.round(activity * fBMR);
+                    var goalCalories = Math.round(currentCalories - CalorieLose());
+                    var maintainCalories = Math.round(activity * newFemaleBMR);
+                } 
+                else {
+                    var currentCalories = Math.round(activity * mBMR);
+                    var goalCalories = Math.round(currentCalories - CalorieLose());
+                    var maintainCalories = Math.round(activity * newMaleBMR);
+                }
+                    
+                    // check to make sure goal calories is not too low or high
+                    if (goalCalories < 1000) {
+                        displayGoalCalories.innerHTML = Warning();
+                    }
+                    else if (goalCalories > 3000) {
+                        displayGoalCalories.innerHTML = WarningMax();
+                    }
+                    else {
+                        displayCurrentCalories.textContent = "In order to maintain your current weight, you should eat:" + currentCalories + " Calories/day.";
+
+                            if ((gWeight > weight)) {
+                                displayGoalCalories.textContent = "To reach your goal of " + gWeight + " lbs in " + convertGoalDays + " days, you should eat: " + goalCalories + " Calories/day, or exercise less to reduce your caloburn rate.";
+                            }
+                            else {
+                                displayGoalCalories.textContent = "To reach your goal of " + gWeight + " lbs in " + convertGoalDays + " days, you should eat: " + goalCalories + " Calories/day, or exercise more to boost your caloburn rate by about " + CalorieLose() + " Calories/day.";    
+                            }
+                        displayMaintainCalories.textContent = "To maintain your goal of " + gWeight + " lbs, you should e" + maintainCalories + " Calories/day.";  
+                        }
+
         }
-            
-          
-// BMR calculation only WITHOUT taking physical activity into account
-                // female and male currentBMR calculation
+        
+        function ActivityChoices() {
+                    if (exerciseInput.value === "") {
+                          alert("Please choose your daily activity option.");
+                    }
+                    else if (exerciseInput.value === "No Activity") {
+                       
+                        CaloriesInfo(1.2);
 
-            function fBMR() {
-                
-                if (impBtn.classList.contains("selected")) {
-                var BMRcalc = 655 + (4.35 * weight) + (4.7 * height) - (4.7 * age);
-                }
-                else {
-                var BMRcalc = 655 + (9.563 * weight) + (1.85 * height) - (4.676 * age);
-                }
-                
-                return BMRcalc;
+                    }
+                    else if ((exerciseInput.value === "Lightly Active")) {
+  
+                        CaloriesInfo(1.375);
+                        
+                    }
+                    else if ((exerciseInput.value === "Moderately Active")) {
+                        
+                        CaloriesInfo(1.55);
+                        
+                    }
+                    else if ((exerciseInput.value === "Very Active")) {
+ 
+                        CaloriesInfo(1.725);
+                    }
+                    else {
+                        
+                        CaloriesInfo(1.9);
+                    }
+        }
+        
+        
+            //Converted input values to float to be used for calculations
+            var age = parseFloat(ageInput.value || 0);
+            var convertGoalDays = parseFloat(goalDaysInput.value || 0);
+        
+            if (impBtn.classList.contains("selected")) {
+                validateForm(); // check all inputs field in for imperial
+                var height = calculation() || 0;
+                var weight = parseFloat(weightInput.value || 0);
+                var gWeight = parseFloat(goalWeightInput.value || 0);
+                var fBMR = BMR(655, 4.35, weight, 4.7, 4.7);
+                var mBMR = BMR(66, 6.23, weight, 12.7, 6.8);
+                var newFemaleBMR = BMR(655, 4.35, gWeight, 4.7, 4.7);
+                var newMaleBMR = BMR(66, 6.23, gWeight, 12.7, 6.8);
             }
-            
-            function mBMR() {
-                
-                if (impBtn.classList.contains("selected")) {
-                    var BMRcalc = 66 + (6.23 * weight) + (12.7 * calculation()) - (6.8 * age);                }
-                else {
-                    var BMRcalc = 66 + (13.75 * weight) + (5.003 * height) - (6.755 * age);
-                }
-                
-                return BMRcalc;
-                
-            }
-                // female and male new BMR needed to maintain the goal weight
-            function newFemaleBMR(){
-                
-                if (impBtn.classList.contains("selected")) {
-                    var newBMRcalc = 655 + (4.35 * gWeight) + (4.7 * height) - (4.7 * age);
-                }
-                else {
-                    var newBMRcalc = 655 + (9.563 * gWeight) + (1.85 * height) - (4.676 * age);
-                }
-                
-                return newBMRcalc;
-            }
-
-            
-            function newMaleBMR() {
-                
-                if (impBtn.classList.contains("selected")) {
-                    var newBMRcalc = 66 + (6.23 * gWeight) + (12.7 * calculation()) - (6.8 * age);
-                }
-                else {
-                    var newBMRcalc = 66 + (13.75 * gWeight) + (5.003 * height) - (6.755 * age);
-                }
-                                    
-                return newBMRcalc;
-            }
-            
-                
-                // This function will display the amount of calories needed to either gain or lose weight
-            function goalGainOrLossDisplay() {   
-                
-                if ((gWeight > weight)) {
-                    displayGoalCalories.textContent = "To reach your goal of " + gWeight + " lbs in " + convertGoalDays + " days, you should eat: " + goalCalories + " Calories/day, or exercise less to reduce your calorie burn rate.";
-                }
-                else {
-                    displayGoalCalories.textContent = "To reach your goal of " + gWeight + " lbs in " + convertGoalDays + " days, you should eat: " + goalCalories + " Calories/day, or exercise more to boost your calorie burn rate by about " + CalorieLose() + " Calories/day.";    
-                }
-            }
-            
-                //Displays the full final text for either females and males
-            function Outcome() {
-                
-                displayCurrentCalories.textContent = "In order to maintain your current weight, you should eat: " + currentCalories + " Calories/day.";
-                
-                goalGainOrLossDisplay();
-                
-                displayMaintainCalories.textContent = "To maintain your goal of " + gWeight + " lbs, you should eat: " + maintainCalories + " Calories/day.";
+            else {
+                validateFormMetric(); // check all inputs field in for imperial
+                var height = parseFloat(cmInput.value || 0);
+                var weight = parseFloat(weightInputKg.value || 0);
+                var gWeight = parseFloat(goalWeightInputKg.value || 0);
+                var fBMR = BMR(655, 9.563, weight, 1.85, 4.676);
+                var mBMR = BMR(66, 13.75, weight, 5.003, 6.775);
+                var newFemaleBMR = BMR(655, 9.563, gWeight, 1.85, 4.676);
+                var newMaleBMR = BMR(66, 13.75, gWeight, 5.003, 6.755);
             }
         
-            function displayCalorieResult() {
+               
 
-                // check to make sure goal calories is not too low or high
-                if (goalCalories < 1000) {
-                    displayGoalCalories.innerHTML = Warning();
-                }
-                else if (goalCalories > 3000) {
-                    displayGoalCalories.innerHTML = WarningMax();
-                }
-                else {
-                    Outcome();  
-                }
-            }
-
- // Bulk of the calculation is done here - females and males values are different therefore if else needed.
-                if (female.checked) {
-                    
-                    if (exerciseInput.value === "") {
-                          alert("Please choose your daily activity option.");
-                    }
-                    else if (exerciseInput.value === "No Activity") {
-                        var currentCalories = Math.round(1.2 * fBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.2 * newFemaleBMR());
-
-                        displayCalorieResult();
-                    }
-                    else if ((exerciseInput.value === "Lightly Active")) {
-                        var currentCalories = Math.round(1.375 * fBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.375 * newFemaleBMR());
-                        
-                        displayCalorieResult();
-
-                    }
-                    else if ((exerciseInput.value === "Moderately Active")) {
-                        var currentCalories = Math.round(1.55 * fBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.55 * newFemaleBMR());
-                        
-                        displayCalorieResult();
-                    }
-                    else if ((exerciseInput.value === "Very Active")) {
-                        var currentCalories = Math.round(1.725 * fBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.725 * newFemaleBMR());
-                        
-                        displayCalorieResult();
-                    }
-                    else {
-                        var currentCalories = Math.round(1.9 * fBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.9 * newFemaleBMR());
-                        
-                        displayCalorieResult();
-                    }
-                    
-                }
-                else if (male.checked) {
-                    if (exerciseInput.value === "") {
-                          alert("Please choose your daily activity option.");
-                    }
-                    else if (exerciseInput.value === "No Activity") {
-                        var currentCalories = Math.round(1.2 * mBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.2 * newMaleBMR());
-                        
-                        displayCalorieResult();
-                        
-                    }
-                    else if ((exerciseInput.value === "Lightly Active")) {
-                        var currentCalories = Math.round(1.375 * mBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.375 * newMaleBMR());
-                        
-                        displayCalorieResult();
-                    }
-                    else if ((exerciseInput.value === "Moderately Active")) {
-                        var currentCalories = Math.round(1.55 * mBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.55 * newMaleBMR());
-                        
-                        displayCalorieResult();
-                    }
-
-                    else if ((exerciseInput.value === "Very Active")) {
-                        var currentCalories = Math.round(1.725 * mBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.725 * newMaleBMR());
-                        
-                        displayCalorieResult();
-                    }
-                    else {
-                        var currentCalories = Math.round(1.9 * mBMR());
-                        var goalCalories = Math.round(currentCalories - CalorieLose());
-                        var maintainCalories = Math.round(1.9 * newMaleBMR());
-                                                                // check to make sure goal calories is not too low
-                        displayCalorieResult();
-                    }
-                    
-                }
-                else {
-                    alert("Please select your gender.");
-                }       
+          if (female.checked) { 
+             ActivityChoices();  
+          }
+          else if (male.checked) {  
+              ActivityChoices();  
+          }   
+          else {
+              alert("Please select your gender.");
+          }
         
     }
 
