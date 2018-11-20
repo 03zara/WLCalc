@@ -165,7 +165,7 @@ var button1 = document.querySelector(".button1");
                             else {
                                 displayGoalCalories.textContent = "To reach your goal of " + gWeight + " lbs in " + convertGoalDays + " days, you should eat: " + goalCalories + " Calories/day, or exercise more to boost your caloburn rate by about " + CalorieLose() + " Calories/day.";    
                             }
-                        displayMaintainCalories.textContent = "To maintain your goal of " + gWeight + " lbs, you should e" + maintainCalories + " Calories/day.";  
+                        displayMaintainCalories.textContent = "To maintain your goal of " + gWeight + " lbs, you should eat " + maintainCalories + " Calories/day.";  
                         }
 
         }
